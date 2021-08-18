@@ -35,6 +35,7 @@ namespace PracAPI1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
 
             app.UseHttpsRedirection();
