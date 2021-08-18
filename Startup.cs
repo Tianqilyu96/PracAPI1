@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NSwag.AspNetCore;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace PracAPI1
 {
@@ -27,6 +30,9 @@ namespace PracAPI1
         {
             services.AddControllers();
             services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddOpenApiDocument();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,7 +41,9 @@ namespace PracAPI1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
+                app.UseOpenApi(); // serve documents (same as app.UseSwagger())
+                app.UseSwaggerUi3(); // serve Swagger UI
+                
             }
 
             app.UseHttpsRedirection();
