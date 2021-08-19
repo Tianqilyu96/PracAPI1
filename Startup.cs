@@ -46,7 +46,8 @@ namespace PracAPI1
                 options.Filters.Add<JsonExeptionFilter>();
                 options.Filters.Add<RequireHttpsFilter>();
             }); //add exception filter 
-
+            services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); }); 
+            //add CORS service
 
         }
 
@@ -65,7 +66,8 @@ namespace PracAPI1
                 app.UseHsts();//prevent localhost using http error, only use https in production
             }
 
-            //app.UseHttpsRedirection(); // redirect http port to https port
+            //app.UseHttpsRedirection(); //  redirect http port to https port
+            app.UseCors("AllowApp");
 
             app.UseRouting();
 
