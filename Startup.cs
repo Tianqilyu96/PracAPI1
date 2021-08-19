@@ -16,6 +16,8 @@ using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using PracAPI1.Filters;
 using PracAPI1.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 
 namespace PracAPI1
 {
@@ -50,7 +52,8 @@ namespace PracAPI1
             services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); });
             //add CORS service
             services.Configure<HotelInfo>(Configuration.GetSection("Info")); //pull json  data out of configuration, and use it to populate an instance of HotelInfo
-
+            //Use in-memory Database for quick dev and testing
+            services.AddDbContext<HotelDbContext>(options => options.UseInMemoryDatabase("hoteldb"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
