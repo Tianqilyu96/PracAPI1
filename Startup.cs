@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using PracAPI1.Filters;
+using PracAPI1.Models;
 
 namespace PracAPI1
 {
@@ -46,8 +47,9 @@ namespace PracAPI1
                 options.Filters.Add<JsonExeptionFilter>();
                 options.Filters.Add<RequireHttpsFilter>();
             }); //add exception filter 
-            services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); }); 
+            services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); });
             //add CORS service
+            services.Configure<HotelInfo>(Configuration.GetSection("Info")); //pull json  data out of configuration, and use it to populate an instance of HotelInfo
 
         }
 

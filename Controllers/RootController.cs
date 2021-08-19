@@ -26,6 +26,11 @@ namespace PracAPI1.Controllers
                 rooms = new
                 {
                     href = Url.Link(nameof(RoomsController.GetRooms),null)
+                },
+
+                info = new
+                {
+                    href = Url.Link(nameof(InfoController.GetInfo),null)  // add info's href
                 }
             }; //the url link of route name/route para
             return Ok(response); //return 200 ok with response
