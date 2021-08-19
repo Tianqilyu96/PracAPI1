@@ -14,6 +14,6 @@ namespace PracAPI1.Controllers
         public IActionResult GetRooms()
         {
             throw new NotImplementedException();
-        }
+        } 
     }
 }

@@ -33,14 +33,19 @@ namespace PracAPI1
             services.AddControllers();
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddOpenApiDocument();
-            services.AddApiVersioning(options => { 
+            services.AddApiVersioning(options =>
+            {
                 options.DefaultApiVersion = new ApiVersion(1, 0); //add default version 1.0
                 options.AssumeDefaultVersionWhenUnspecified = true; // if not found => 1.0
                 options.ApiVersionReader = new MediaTypeApiVersionReader(); //specify where to find the api version info
                 options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
                 options.ReportApiVersions = true;
             });
-            services.AddMvc(options => { options.Filters.Add<JsonExeptionFilter>(); }); //add exception filter
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<JsonExeptionFilter>();
+                options.Filters.Add<RequireHttpsFilter>();
+            }); //add exception filter 
 
 
         }
@@ -53,10 +58,14 @@ namespace PracAPI1
                 app.UseDeveloperExceptionPage();
                 app.UseOpenApi(); // serve documents (same as app.UseSwagger())
                 app.UseSwaggerUi3(); // serve Swagger UI
-                
+
+            }
+            else
+            {
+                app.UseHsts();//prevent localhost using http error, only use https in production
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection(); // redirect http port to https port
 
             app.UseRouting();
 
