@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using NSwag.AspNetCore;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using PracAPI1.Filters;
 
 namespace PracAPI1
 {
@@ -31,6 +33,14 @@ namespace PracAPI1
             services.AddControllers();
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddOpenApiDocument();
+            services.AddApiVersioning(options => { 
+                options.DefaultApiVersion = new ApiVersion(1, 0); //add default version 1.0
+                options.AssumeDefaultVersionWhenUnspecified = true; // if not found => 1.0
+                options.ApiVersionReader = new MediaTypeApiVersionReader(); //specify where to find the api version info
+                options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
+                options.ReportApiVersions = true;
+            });
+            services.AddMvc(options => { options.Filters.Add<JsonExeptionFilter>(); }); //add exception filter
 
 
         }

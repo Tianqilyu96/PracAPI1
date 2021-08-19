@@ -8,6 +8,7 @@ namespace PracAPI1.Controllers
 {
     [Route("/")]
     [ApiController]
+    [ApiVersion("1.0")] // set api version
     public class RootController : ControllerBase   //controllerbase is for API, return links to all other routes and controllers
 
     {
@@ -16,6 +17,7 @@ namespace PracAPI1.Controllers
         //Are only used for URL generation.
         //Route names must be unique application-wide.
         [HttpGet(Name = nameof(GetRoot))] //tell controller handle http get method
+        [ProducesResponseType(200)] //optional
         public IActionResult GetRoot()  //return http status code or JSON 
         {
             var response = new 
