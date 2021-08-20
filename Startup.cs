@@ -18,6 +18,7 @@ using PracAPI1.Filters;
 using PracAPI1.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
+using PracAPI1.Services;
 
 namespace PracAPI1
 {
@@ -54,6 +55,10 @@ namespace PracAPI1
             services.Configure<HotelInfo>(Configuration.GetSection("Info")); //pull json  data out of configuration, and use it to populate an instance of HotelInfo
             //Use in-memory Database for quick dev and testing
             services.AddDbContext<HotelDbContext>(options => options.UseInMemoryDatabase("hoteldb"));
+            services.AddScoped<IRoomService, RoomService>();
+            //The entity framework core objects like the dbcontext,
+            //used the scoped lifetime.
+            //So any service that interacts with the dbcontext needs to be scoped as well. 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
