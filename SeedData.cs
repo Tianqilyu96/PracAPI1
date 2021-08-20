@@ -22,14 +22,14 @@ namespace PracAPI1
             }
             context.Room.Add(new RoomEntity
             {
-                Id = Guid.Parse("0001"),
+                Id = Guid.Parse("301df04d-8679-4b1b-ab92-0a586ae53d08"),
                 Name = "No.1 Suit",
                 Rate = 11111,
             });
 
             context.Room.Add(new RoomEntity
             {
-                Id = Guid.Parse("0002"),
+                Id = Guid.Parse("ee2b83be-91db-4de5-8122-35a9e9195976"),
                 Name = "No.2 Suit",
                 Rate = 22222,
             });
