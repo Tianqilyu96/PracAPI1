@@ -19,6 +19,7 @@ using PracAPI1.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using PracAPI1.Services;
+using PracAPI1.Infrastructure;
 
 namespace PracAPI1
 {
@@ -59,6 +60,7 @@ namespace PracAPI1
             //The entity framework core objects like the dbcontext,
             //used the scoped lifetime.
             //So any service that interacts with the dbcontext needs to be scoped as well. 
+            services.AddAutoMapper(options => options.AddProfile<MappingProfile>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
