@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PracAPI1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +21,26 @@ namespace PracAPI1.Controllers
         [ProducesResponseType(200)] //optional
         public IActionResult GetRoot()  //return http status code or JSON 
         {
-            var response = new 
-            { 
-                href = Url.Link(nameof(GetRoot),null), 
-                rooms = new
-                {
-                    href = Url.Link(nameof(RoomsController.GetRooms),null)
-                },
+            //var response = new 
+            //{ 
+            //    href = Url.Link(nameof(GetRoot),null), 
+            //    rooms = new
+            //    {
+            //        href = Url.Link(nameof(RoomsController.GetRooms),null)
+            //    },
 
-                info = new
-                {
-                    href = Url.Link(nameof(InfoController.GetInfo),null)  // add info's href
-                }
-            }; //the url link of route name/route para
+            //    info = new
+            //    {
+            //        href = Url.Link(nameof(InfoController.GetInfo),null)  // add info's href
+            //    }
+            //}; //the url link of route name/route para
+            var response = new RootResponse
+            {
+                Href = null,
+                Rooms = Link.To(nameof(RoomsController.GetRooms)),
+                Info = Link.To(nameof(InfoController.GetInfo))
+
+            };
             return Ok(response); //return 200 ok with response
         }
     }
