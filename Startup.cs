@@ -50,6 +50,7 @@ namespace PracAPI1
             {
                 options.Filters.Add<JsonExeptionFilter>();
                 options.Filters.Add<RequireHttpsFilter>();
+                options.Filters.Add<LinkRewritingFilter>();
             }); //add exception filter 
             services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); });
             //add CORS service

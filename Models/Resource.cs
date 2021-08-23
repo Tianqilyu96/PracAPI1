@@ -9,6 +9,8 @@ namespace PracAPI1.Models
     public abstract class Resource
     { 
         [JsonProperty(Order = -2)] //it will be on top of all serialized response
-        public string Href { get; set; }
+        public Link Self { get; set; }
+
+
     }
 }

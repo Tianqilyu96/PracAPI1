@@ -31,6 +31,7 @@ namespace PracAPI1.Models
         //Store the route name and val before being rewriten by the rewritting fillter
         [JsonIgnore]
         public string RouteName { get; set; }
+
         [JsonIgnore]
         public object RouteValue { get; set; } //route value should be an object
     }
