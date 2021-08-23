@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PracAPI1.Models
 {
-    public abstract class Resource
+    public abstract class Resource : Link
     { 
-        [JsonProperty(Order = -2)] //it will be on top of all serialized response
+        [JsonIgnore] //it will be on top of all serialized response
         public Link Self { get; set; }
 
 
