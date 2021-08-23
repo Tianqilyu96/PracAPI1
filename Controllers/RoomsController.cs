@@ -19,10 +19,18 @@ namespace PracAPI1.Controllers
         {
             roomService = service;
         }
-        [HttpGet(Name = nameof(GetRooms))]
-        public IActionResult GetRooms()
+        [HttpGet(Name = nameof(GetAllRooms))]
+        public async Task<ActionResult<Collection<Room>>> GetAllRooms()
         {
-            throw new NotImplementedException();
+            var rooms = await roomService.GetRoomsAsync();
+
+            var collection = new Collection<Room>
+            {
+                Self = Link.To(nameof(GetAllRooms)),
+                Value = rooms.ToArray()
+            };
+
+            return collection;
         } 
 
         [HttpGet("{id}",Name =nameof(GetRoomById))] //GET /Rooms/{id}

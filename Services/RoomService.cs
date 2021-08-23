@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using PracAPI1.Models;
 using System;
@@ -11,12 +12,13 @@ namespace PracAPI1.Services
     public class RoomService : IRoomService
     {
         private readonly HotelDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IConfigurationProvider configurationProvider;
 
-        public RoomService(HotelDbContext context,IMapper mapper)
+        public RoomService(HotelDbContext context, IConfigurationProvider configurationProvider)
         {
             _context = context;
-            _mapper = mapper;
+            
+            this.configurationProvider = configurationProvider;
         }
         public async Task<Room> GetRoomAsync(Guid id)
         {
@@ -34,7 +36,15 @@ namespace PracAPI1.Services
             //    Rate = (entity.Rate / 100.0m).ToString(),
 
             //};
-            return _mapper.Map<Room>(entity);//map from entity object to room
+            var mapper = configurationProvider.CreateMapper();
+            return mapper.Map<Room>(entity);//map from entity object to room
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomsAsync()
+        {
+            var query = _context.Room.ProjectTo<Room>(configurationProvider);
+
+            return await query.ToListAsync();
         }
     }
 }

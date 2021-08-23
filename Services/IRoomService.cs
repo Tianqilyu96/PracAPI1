@@ -12,6 +12,7 @@ namespace PracAPI1.Services
     // and keep the controller as thin as possible.
     public interface IRoomService
     {
+        Task<IEnumerable<Room>> GetRoomsAsync();
         Task<Room> GetRoomAsync(Guid id);
     }
 }
