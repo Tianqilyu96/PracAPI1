@@ -14,5 +14,7 @@ namespace PracAPI1
 
         }
         public DbSet<RoomEntity> Room { get; set; }
+
+        public DbSet<BookingEntity> Bookings { get; set; }
     }
 }
