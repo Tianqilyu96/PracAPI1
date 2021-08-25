@@ -14,11 +14,18 @@ namespace PracAPI1.Controllers
     public class RoomsController : ControllerBase //let client search room in the hotel
     {
         private readonly IRoomService roomService;
+        private readonly IOpeningService _openingService;
+        private readonly IDateLogicService dateLogicService;
+        private readonly IBookingService bookingService;
 
-        public RoomsController(IRoomService service)
+        public RoomsController(IRoomService service, IOpeningService openingService, IDateLogicService dateLogicService,IBookingService bookingService)
         {
             roomService = service;
+            _openingService = openingService;
+            this.dateLogicService = dateLogicService;
+            this.bookingService = bookingService;
         }
+
         [HttpGet(Name = nameof(GetAllRooms))]
         public async Task<ActionResult<Collection<Room>>> GetAllRooms()
         {
@@ -45,5 +52,53 @@ namespace PracAPI1.Controllers
             }
             return room;
         }
+
+        // GET /rooms/openings
+        [HttpGet("openings", Name = nameof(GetAllRoomOpenings))]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<Collection<Opening>>> GetAllRoomOpenings([FromQuery]PagingOptions pagingOptions = null)
+        {
+            var openings = await _openingService.GetOpeningsAsync(pagingOptions);
+
+            var collection = new PageCollection<Opening>()
+            {
+                Self = Link.ToCollection(nameof(GetAllRoomOpenings)),
+                Value = openings.Items.ToArray(),
+                Size = openings.TotalSize,
+                OffSet = pagingOptions.OffSet.Value,
+                Limit = pagingOptions.Limit.Value
+            };
+
+            return collection;
+        }
+
+        //POST /rooms/id/bookings
+        [HttpPost("{id}/bookings",Name = nameof(CreateBookingForRoom))]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(201)]
+        public async Task<ActionResult> CreateBookingForRoom(Guid id, [FromBody] BookingForm bookingForm)
+        {
+            var room = await roomService.GetRoomAsync(id);
+            if (room == null) return NotFound();
+
+            var minimumStay = dateLogicService.GetMinimumStay();
+            bool tooShort = (bookingForm.EndAt.Value - bookingForm.StartAt.Value) < minimumStay;
+
+            if (tooShort) return BadRequest(new ApiError($"The minimum stay is {minimumStay} hours"));
+
+            var conflictSlots = await _openingService.GetConflictingSlots(id, bookingForm.StartAt.Value, bookingForm.EndAt.Value);
+            if (conflictSlots.Any()) return BadRequest(new ApiError("This room is already booked by someone"));
+
+            //TODO: Get user id
+            var userId = Guid.NewGuid();
+
+            var bookingId = await bookingService.CreateBookingAsync(userId, id, bookingForm.StartAt.Value, bookingForm.EndAt.Value);
+
+            return Created(Url.Link(nameof(GetRoomById), new { bookingId }), null);
+
+        }
+
+
     }
 }

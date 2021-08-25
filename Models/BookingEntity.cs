@@ -18,4 +18,4 @@ namespace PracAPI1.Models
         public int Total { get; set; }
     }
 }
-}
+

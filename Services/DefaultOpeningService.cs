@@ -24,7 +24,7 @@ namespace PracAPI1.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Opening>> GetOpeningsAsync()
+        public async Task<PagedResults<Opening>> GetOpeningsAsync(PagingOptions pagingOptions)
         {
             var rooms = await _context.Room.ToArrayAsync();
 
@@ -58,7 +58,16 @@ namespace PracAPI1.Services
                 allOpenings.AddRange(openings);
             }
 
-            return allOpenings;
+            //return allOpenings;
+            var pagedopenings = allOpenings
+                .Skip(pagingOptions.OffSet.Value)
+                .Take(pagingOptions.Limit.Value);
+
+            return new PagedResults<Opening>
+            {
+                Items = pagedopenings,
+                TotalSize = allOpenings.Count
+            };
         }
 
         public async Task<IEnumerable<BookingRange>> GetConflictingSlots(

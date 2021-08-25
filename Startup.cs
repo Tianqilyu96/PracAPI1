@@ -56,13 +56,22 @@ namespace PracAPI1
             }); //add exception filter 
             services.AddCors(options => { options.AddPolicy("AllowApp", policy => policy.WithOrigins("https://somethingdiffrernt.com")); });
             //add CORS service
+
             services.Configure<HotelInfo>(Configuration.GetSection("Info")); //pull json  data out of configuration, and use it to populate an instance of HotelInfo
             //Use in-memory Database for quick dev and testing
+
+            services.Configure<HotelOptions>(Configuration);
+
             services.AddDbContext<HotelDbContext>(options => options.UseInMemoryDatabase("hoteldb"));
+
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IOpeningService, DefaultOpeningService>();
+            services.AddScoped<IBookingService, DefaultBookingService>();
+            services.AddScoped<IDateLogicService, DefaultDateLogicService>();
             //The entity framework core objects like the dbcontext,
             //used the scoped lifetime.
             //So any service that interacts with the dbcontext needs to be scoped as well. 
+
             services.AddAutoMapper(options => options.AddProfile<MappingProfile>());
         }
 
